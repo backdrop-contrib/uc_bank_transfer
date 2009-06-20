@@ -1,0 +1,43 @@
+<?php
+// $Id$
+
+function uc_bank_transfer_schema() {
+  $schema = array();
+
+  $schema['uc_payment_bank_transfer'] = array(
+    'fields' => array(
+      'bank_transfer_id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'order_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'clear_date' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'indexes' => array(
+      'order_id' => array('order_id'),
+    ),
+    'primary key' => array('bank_transfer_id'),
+  );
+
+  return $schema;
+}
+
+function uc_bank_transfer_install() {
+  drupal_install_schema('uc_bank_transfer');
+}
+
+function uc_bank_transfer_uninstall() {
+  drupal_uninstall_schema('uc_bank_transfer');
+
+  db_query("DELETE FROM {variable} WHERE name LIKE 'uc_bank_transfer_%%'");
+}

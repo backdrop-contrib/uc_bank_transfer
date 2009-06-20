@@ -1,0 +1,204 @@
+<?php
+// $Id$
+
+/* @file
+ * Provides the Bank Transfer payment method.
+ */
+
+/**
+ * Implementation of hook_menu().
+ */
+function uc_bank_transfer_menu() {
+  $items['admin/store/orders/%uc_order/receive_bank_transfer'] = array(
+    'title' => 'Receive Bank Transfer',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('uc_bank_transfer_receive_bank_transfer_form', 3),
+    'access arguments' => array('view all orders'),
+    'type' => MENU_CALLBACK,
+    'file' => 'uc_bank_transfer.admin.inc',
+  );
+  return $items;
+}
+
+function uc_bank_transfer_theme() {
+  return array(
+    'uc_bank_transfer_receive_bank_transfer_form' => array(
+      'arguments' => array('form' => NULL),
+      'file' => 'uc_bank_transfer.admin.inc',
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_payment_method().
+ */
+function uc_bank_transfer_payment_method() {
+  $methods[] = array(
+    'id' => 'bank_transfer',
+    'name' => t('Bank Transfer'),
+    'title' => variable_get('uc_bank_transfer_method_title', 'Bank Transfer'),
+    'desc' => t('Pay by Bank Transfer.'),
+    'callback' => 'uc_payment_method_bank_transfer',
+    'weight' => 1,
+    'bank_transferout' => TRUE,
+    'no_gateway' => TRUE,
+  );
+  return $methods;
+}
+
+/**
+ * Implementation of hook_token_values().
+ */
+function uc_bank_transfer_token_values($type, $object = NULL) {
+  switch ($type) {
+    case 'order':
+      $order = $object;
+      $values['order-payment-bank-details'] = uc_bank_transfer_bank_details($order->order_id);
+      break;
+  }
+
+  return $values;
+}
+
+/**
+ * Implementation of hook_token_list(). (token.module)
+ */
+function uc_bank_transfer_token_list($type = 'all') {
+  if ($type == 'order' || $type == 'ubercart' || $type == 'all') {
+    $tokens['order']['order-payment-bank-details'] = t('The bank details of the order.');
+  }
+
+  return $tokens;
+}
+
+/**
+ * Handle the Bank Transfer payment method.
+ */
+function uc_payment_method_bank_transfer($op, &$arg1) {
+  switch ($op) {
+    case 'cart-details':
+      if (variable_get('uc_bank_transfer_subject_oid', TRUE)) {
+        // order number is not yet generated at first display of cart details - skip to show standard message
+        return ''; }
+      else {
+        $details = t('To: ') . uc_bank_transfer_bank_details($arg1->order_id);
+        return $details;
+      }
+
+    case 'cart-review':
+      $review[] = array('title' => t('To'), 'data' => uc_bank_transfer_bank_details($arg1->order_id));
+      return $review;
+
+    case 'order-view':
+      if (!variable_get('uc_payment_tracking', TRUE)) {
+        return '';
+      }
+      $result = db_query("SELECT clear_date FROM {uc_payment_bank_transfer} WHERE "
+                        ."order_id = %d ", $arg1->order_id);
+      if ($bank_transfer = db_fetch_object($result)) {
+        $output = t('Clear Date:') .' '. format_date($bank_transfer->clear_date, 'custom', variable_get('uc_date_format_default', 'd/m/Y'));
+      }
+      else {
+        $output = l(t('Receive Bank Transfer'), 'admin/store/orders/'. $arg1->order_id .'/receive_bank_transfer');
+      }
+      $output .= '<br />';
+      return $output;
+
+    case 'customer-view':
+      if (!variable_get('uc_payment_tracking', TRUE)) {
+        return '';
+      }
+      $result = db_query("SELECT clear_date FROM {uc_payment_bank_transfer} WHERE "
+                        ."order_id = %d ", $arg1->order_id);
+      if ($bank_transfer = db_fetch_object($result)) {
+        $output = t('Bank Transfer received') .'<br />'
+                . t('Expected clear date:') .'<br />'. format_date($bank_transfer->clear_date, 'custom', variable_get('uc_date_format_default', 'd/m/Y'));
+      }
+      return $output;
+
+    case 'settings':
+      $form['uc_bank_transfer_method_title'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Payment method title'),
+        '#description' => t('Provide specific description for the payment method on the order checkout page.'),
+        '#default_value' => variable_get('uc_bank_transfer_method_title', t('Bank transfer')),
+      );
+
+      $form['uc_dd_bank'] = array(
+        '#type' => 'fieldset',
+        '#title' => t('Bank details'),
+	'#description' => t('Enter the bank account details to display to customers who choose this payment method during checkout.
+          Details left empty will not be shown. You can also choose to leave all bank details empty and create your own output using the payment instructions.
+          '),
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE,
+      );
+      $form['uc_dd_bank']['uc_bank_transfer_account_name'] = uc_textfield(t('Account Name'), variable_get('uc_bank_transfer_account_name', ''), FALSE, t('Name associated with bank account.'), 128);
+      $form['uc_dd_bank']['uc_bank_transfer_account_number'] = uc_textfield(t('Account Number'), variable_get('uc_bank_transfer_account_number', ''), FALSE, NULL, 128);
+      $form['uc_dd_bank']['uc_bank_transfer_account_bsb'] = uc_textfield(t('BSB'), variable_get('uc_bank_transfer_account_bsb', ''), FALSE, t('Australian Bank State Branch code'), 128);
+      $form['uc_dd_bank']['uc_bank_transfer_account_iban'] = uc_textfield(t('IBAN'), variable_get('uc_bank_transfer_account_iban', ''), FALSE, t('International Bank Account Number'), 128);
+      $form['uc_dd_bank']['uc_bank_transfer_account_swift'] = uc_textfield(t('SWIFT'), variable_get('uc_bank_transfer_account_swift', ''), FALSE, t('SWIFT-Code (aka BIC = Bank Identifier Code)'), 128);
+      $form['uc_dd_bank']['uc_bank_transfer_account_clearing'] = uc_textfield(t('Clearing Number'), variable_get('uc_bank_transfer_account_clearing', ''), FALSE);
+      $form['uc_dd_bank']['uc_bank_transfer_account_bank'] = uc_textfield(t('Bank Name'), variable_get('uc_bank_transfer_account_bank', ''), FALSE);
+      $form['uc_dd_bank']['uc_bank_transfer_account_branch'] = uc_textfield(t('Bank Branch'), variable_get('uc_bank_transfer_account_branch', ''), FALSE);
+
+      $form['uc_bank_transfer_subject_oid'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Display order ID as subject'),
+        '#description' => t('Note: with this option enabled the details cannot be displayed on the checkout page (only later).'),
+        '#default_value' => TRUE,
+      );
+      $form['uc_bank_transfer_policy'] = array(
+        '#type' => 'textarea',
+        '#title' => t('Payment instructions'),
+        '#description' => t('Instructions for customers on the checkout page. Use &lt;br /&gt; for line break.<br />
+          Note: you can use the token [order-payment-bank-details] to display the bank details on the invoice.'),
+        '#default_value' => variable_get('uc_bank_transfer_policy', 'Please note: bank details will not be displayed after checkout.'),
+        '#rows' => 3,
+      );
+      return $form;
+  }
+}
+
+/**
+ * Implementation of uc_bank_transfer_bank_details($oid).
+ *
+ * $oid = order ID
+ */
+function uc_bank_transfer_bank_details($oid) {
+  if (variable_get('uc_bank_transfer_account_name', '') <> '') {
+    $bank_info[] = variable_get('uc_bank_transfer_account_name', '');
+  }
+  if (variable_get('uc_bank_transfer_account_number', '') <> '') {
+    $bank_info[] = t('Account') . ': ' . variable_get('uc_bank_transfer_account_number', '');
+  }
+  if (variable_get('uc_bank_transfer_account_bsb', '') <> '') {
+    $bank_info[] = t('BSB') . ': ' . variable_get('uc_bank_transfer_account_bsb', '');
+  }
+  if (variable_get('uc_bank_transfer_account_iban', '') <> '') {
+    $bank_info[] = t('IBAN') . ': ' . variable_get('uc_bank_transfer_account_iban', '');
+  }
+  if (variable_get('uc_bank_transfer_account_swift', '') <> '') {
+    $bank_info[] = t('SWIFT') . ': ' . variable_get('uc_bank_transfer_account_swift', '');
+  }
+  if (variable_get('uc_bank_transfer_account_clearing', '') <> '') {
+    $bank_info[] = t('Clearing Number') . ': ' . variable_get('uc_bank_transfer_account_clearing', '');
+  }
+  if (variable_get('uc_bank_transfer_account_bank', '') <> '') {
+    $bank_info[] = t('Bank') . ': ' . variable_get('uc_bank_transfer_account_bank', '');
+  }
+  if (variable_get('uc_bank_transfer_account_branch', '') <> '') {
+    $bank_info[] = t('Branch') . ': ' . variable_get('uc_bank_transfer_account_branch', '');
+  }
+  if (variable_get('uc_bank_transfer_subject_oid', TRUE)) {
+    $bank_info[] = '<br />' . t('Subject') . ': ' . t('order number') . ' ' . $oid;
+  }
+  if (variable_get('uc_bank_transfer_policy', '') <> '') {
+    $bank_info[] = '<br />' . variable_get('uc_bank_transfer_policy', '');
+  }
+
+  $bank_details = implode('<br />', $bank_info);
+
+  return $bank_details;
+}
+
