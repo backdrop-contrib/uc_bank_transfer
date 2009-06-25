@@ -156,7 +156,7 @@ function uc_payment_method_bank_transfer($op, &$arg1) {
         '#type' => 'checkbox',
         '#title' => t('Display order ID as subject'),
         '#description' => t('Note: with this option enabled the details cannot be displayed on the checkout page (only later).'),
-        '#default_value' => TRUE,
+        '#default_value' => FALSE,
       );
       $form['uc_bank_transfer_policy'] = array(
         '#type' => 'textarea',
