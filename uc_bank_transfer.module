@@ -117,6 +117,16 @@ function uc_payment_method_bank_transfer($op, &$arg1) {
       return $output;
 
     case 'settings':
+      // help text
+      $form['uc_bank_transfer_help_text'] = array(
+        '#type' => 'item',
+        '#prefix' => '<div class="help">',
+        '#value' => t('<h4><strong>Installation instructions</strong></h4>
+          <p>For better customer experience please use the token [order-payment-bank-details] to display the bank details on the invoice.
+          You can find an example invoice template doing this in the uc_bank_transfer module folder.</p>'),
+        '#suffix' => '</div>',
+      );
+      // settings
       $form['uc_bank_transfer_method_title'] = array(
         '#type' => 'textfield',
         '#title' => t('Payment method title'),
@@ -151,9 +161,8 @@ function uc_payment_method_bank_transfer($op, &$arg1) {
       $form['uc_bank_transfer_policy'] = array(
         '#type' => 'textarea',
         '#title' => t('Payment instructions'),
-        '#description' => t('Instructions for customers on the checkout page. Use &lt;br /&gt; for line break.<br />
-          Note: you can use the token [order-payment-bank-details] to display the bank details on the invoice.'),
-        '#default_value' => variable_get('uc_bank_transfer_policy', 'Please note: bank details will not be displayed after checkout.'),
+        '#description' => t('Instructions for customers on the checkout page. Use &lt;br /&gt; for line break.'),
+        '#default_value' => variable_get('uc_bank_transfer_policy', ''),
         '#rows' => 3,
       );
       return $form;
