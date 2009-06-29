@@ -206,7 +206,7 @@ function uc_bank_transfer_bank_details($oid) {
     $bank_info[] = '<br />' . variable_get('uc_bank_transfer_policy', '');
   }
 
-  $bank_details = implode('<br />', $bank_info);
+  isset($bank_info) ? ($bank_details = implode('<br />', $bank_info)) : ($bank_details = '');
 
   return $bank_details;
 }
