@@ -154,9 +154,9 @@ function uc_payment_method_bank_transfer($op, &$arg1) {
 
       $form['uc_bank_transfer_subject_oid'] = array(
         '#type' => 'checkbox',
-        '#title' => t('Display order ID as subject'),
+        '#title' => t('Display "Subject: order number <i>[order ID]</i>"'),
         '#description' => t('Note: with this option enabled the details cannot be displayed on the checkout page (only later).'),
-        '#default_value' => FALSE,
+        '#default_value' => variable_get('uc_bank_transfer_subject_oid', FALSE),
       );
       $form['uc_bank_transfer_policy'] = array(
         '#type' => 'textarea',
@@ -199,7 +199,7 @@ function uc_bank_transfer_bank_details($oid) {
   if (variable_get('uc_bank_transfer_account_branch', '') <> '') {
     $bank_info[] = t('Branch') . ': ' . variable_get('uc_bank_transfer_account_branch', '');
   }
-  if (variable_get('uc_bank_transfer_subject_oid', TRUE)) {
+  if (variable_get('uc_bank_transfer_subject_oid', FALSE)) {
     $bank_info[] = '<br />' . t('Subject') . ': ' . t('order number') . ' ' . $oid;
   }
   if (variable_get('uc_bank_transfer_policy', '') <> '') {
