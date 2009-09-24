@@ -168,6 +168,7 @@
                     <?php
                     $context = array(
                       'revision' => 'themed',
+                      'type' => 'line_item',
                       'subject' => array(
                         'order' => $order,
                       ),
@@ -214,6 +215,7 @@
                           <?php if (is_array($order->products)) {
                             $context = array(
                               'revision' => 'formatted',
+                              'type' => 'order_product',
                               'subject' => array(
                                 'order' => $order,
                               ),
@@ -224,6 +226,7 @@
                                 'qty' => $product->qty,
                               );
                               $context['subject']['order_product'] = $product;
+                              $context['subject']['node'] = node_load($product->nid);
                               ?>
                           <tr>
                             <td valign="top" nowrap="nowrap">
