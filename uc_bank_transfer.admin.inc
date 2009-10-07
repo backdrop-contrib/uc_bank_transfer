@@ -78,7 +78,7 @@ function uc_bank_transfer_receive_bank_transfer_form_validate($form, &$form_stat
 function uc_bank_transfer_receive_bank_transfer_form_submit($form, &$form_state) {
   global $user;
 
-  uc_payment_enter($form_state['values']['order_id'], _payment_method_data('bank_transfer', 'name'),
+  uc_payment_enter($form_state['values']['order_id'], 'bank_transfer',
                    $form_state['values']['amount'], $user->uid, '', $form_state['values']['comment']);
 
   db_query("INSERT INTO {uc_payment_bank_transfer} (order_id, clear_date) "
