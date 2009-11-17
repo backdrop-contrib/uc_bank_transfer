@@ -6,6 +6,18 @@
  */
 
 /**
+ * Implementation of hook_init().
+ */
+function uc_bank_transfer_init() {
+  global $conf;
+  $conf['i18n_variables'][] = 'uc_bank_transfer_method_title';
+  $conf['i18n_variables'][] = 'uc_bank_transfer_account_name';
+  $conf['i18n_variables'][] = 'uc_bank_transfer_account_bank';
+  $conf['i18n_variables'][] = 'uc_bank_transfer_account_branch';
+  $conf['i18n_variables'][] = 'uc_bank_transfer_policy';
+}
+
+/**
  * Implementation of hook_menu().
  */
 function uc_bank_transfer_menu() {
