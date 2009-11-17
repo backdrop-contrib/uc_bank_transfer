@@ -1,0 +1,327 @@
+# $Id$
+#
+# LANGUAGE translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  uc_bank_transfer.admin.inc,v 1.4 2009/10/07 20:51:42 xibun
+#  uc_bank_transfer.module,v 1.5 2009/06/29 16:53:51 xibun
+#  uc_bank_transfer.info,v 1.1 2009/06/20 19:53:44 xibun
+#  customer_bank_transfer.itpl.php,v 1.3 2009/09/24 08:54:08 xibun
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2009-11-17 17:24+0100\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: uc_bank_transfer.admin.inc:22
+msgid "Bank Transfer has already been received."
+msgstr ""
+
+#: uc_bank_transfer.admin.inc:27
+msgid "Amount"
+msgstr ""
+
+#: uc_bank_transfer.admin.inc:35
+msgid "Reciept No. / Comment"
+msgstr ""
+
+#: uc_bank_transfer.admin.inc:36
+msgid "Any notes about the Bank Transfer, like receipt number."
+msgstr ""
+
+#: uc_bank_transfer.admin.inc:42
+msgid "Expected clear date"
+msgstr ""
+
+#: uc_bank_transfer.admin.inc:54 uc_bank_transfer.module:114;25
+msgid "Receive Bank Transfer"
+msgstr ""
+
+#: uc_bank_transfer.admin.inc:63
+msgid "Use the form to enter the Bank Transfer into the payments system and set the expected clear date."
+msgstr ""
+
+#: uc_bank_transfer.admin.inc:64
+msgid "Order balance:"
+msgstr ""
+
+#: uc_bank_transfer.admin.inc:74
+msgid "The amount must be a number."
+msgstr ""
+
+#: uc_bank_transfer.admin.inc:88
+msgid "Bank Transfer received, expected clear date of @date."
+msgstr ""
+
+#: uc_bank_transfer.module:50 uc_bank_transfer.info:0
+msgid "Bank Transfer"
+msgstr ""
+
+#: uc_bank_transfer.module:52
+msgid "Pay by Bank Transfer."
+msgstr ""
+
+#: uc_bank_transfer.module:80
+msgid "The bank details of the order."
+msgstr ""
+
+#: uc_bank_transfer.module:96
+msgid "To: "
+msgstr ""
+
+#: uc_bank_transfer.module:101
+msgid "To"
+msgstr ""
+
+#: uc_bank_transfer.module:111
+msgid "Clear Date:"
+msgstr ""
+
+#: uc_bank_transfer.module:126
+msgid "Bank Transfer received"
+msgstr ""
+
+#: uc_bank_transfer.module:127
+msgid "Expected clear date:"
+msgstr ""
+
+#: uc_bank_transfer.module:136
+msgid "<h4><strong>Installation instructions</strong></h4>\n          <p>For better customer experience please use the token [order-payment-bank-details] to display the bank details on the invoice.\n          You can find an example invoice template doing this in the uc_bank_transfer module folder.</p>"
+msgstr ""
+
+#: uc_bank_transfer.module:144
+msgid "Payment method title"
+msgstr ""
+
+#: uc_bank_transfer.module:145
+msgid "Provide specific description for the payment method on the order checkout page."
+msgstr ""
+
+#: uc_bank_transfer.module:146
+msgid "Bank transfer"
+msgstr ""
+
+#: uc_bank_transfer.module:151
+msgid "Bank details"
+msgstr ""
+
+#: uc_bank_transfer.module:152
+msgid "Enter the bank account details to display to customers who choose this payment method during checkout.\n          Details left empty will not be shown. You can also choose to leave all bank details empty and create your own output using the payment instructions.\n          "
+msgstr ""
+
+#: uc_bank_transfer.module:158
+msgid "Account Name"
+msgstr ""
+
+#: uc_bank_transfer.module:158
+msgid "Name associated with bank account."
+msgstr ""
+
+#: uc_bank_transfer.module:159
+msgid "Account Number"
+msgstr ""
+
+#: uc_bank_transfer.module:160;197
+msgid "BSB"
+msgstr ""
+
+#: uc_bank_transfer.module:160
+msgid "Australian Bank State Branch code"
+msgstr ""
+
+#: uc_bank_transfer.module:161;200
+msgid "IBAN"
+msgstr ""
+
+#: uc_bank_transfer.module:161
+msgid "International Bank Account Number"
+msgstr ""
+
+#: uc_bank_transfer.module:162;203
+msgid "SWIFT"
+msgstr ""
+
+#: uc_bank_transfer.module:162
+msgid "SWIFT-Code (aka BIC = Bank Identifier Code)"
+msgstr ""
+
+#: uc_bank_transfer.module:163;206
+msgid "Clearing Number"
+msgstr ""
+
+#: uc_bank_transfer.module:164
+msgid "Bank Name"
+msgstr ""
+
+#: uc_bank_transfer.module:165
+msgid "Bank Branch"
+msgstr ""
+
+#: uc_bank_transfer.module:169
+msgid "Display \"Subject: order number <i>[order ID]</i>\""
+msgstr ""
+
+#: uc_bank_transfer.module:170
+msgid "Note: with this option enabled the details cannot be displayed on the checkout page (only later)."
+msgstr ""
+
+#: uc_bank_transfer.module:175
+msgid "Payment instructions"
+msgstr ""
+
+#: uc_bank_transfer.module:176
+msgid "Instructions for customers on the checkout page. Use &lt;br /&gt; for line break."
+msgstr ""
+
+#: uc_bank_transfer.module:194
+msgid "Account"
+msgstr ""
+
+#: uc_bank_transfer.module:209
+msgid "Bank"
+msgstr ""
+
+#: uc_bank_transfer.module:212
+msgid "Branch"
+msgstr ""
+
+#: uc_bank_transfer.module:215
+msgid "Subject"
+msgstr ""
+
+#: uc_bank_transfer.module:215
+msgid "order number"
+msgstr ""
+
+#: uc_bank_transfer.info:0
+msgid "Provides the Bank Transfer payment method."
+msgstr ""
+
+#: uc_bank_transfer.info:0
+msgid "Ubercart - payment"
+msgstr ""
+
+#: template/customer_bank_transfer.itpl.php:41
+msgid "Thanks for your order, [order-first-name]!"
+msgstr ""
+
+#: template/customer_bank_transfer.itpl.php:44
+msgid "An account has been created for you with the following details:"
+msgstr ""
+
+#: template/customer_bank_transfer.itpl.php:45
+msgid "Username:"
+msgstr ""
+
+#: template/customer_bank_transfer.itpl.php:46
+msgid "Password:"
+msgstr ""
+
+#: template/customer_bank_transfer.itpl.php:49
+msgid "Want to manage your order online?"
+msgstr ""
+
+#: template/customer_bank_transfer.itpl.php:50
+msgid "If you need to check the status of your order, please visit our home page at [store-link] and click on \"My account\" in the menu or login with the following link:"
+msgstr ""
+
+#: template/customer_bank_transfer.itpl.php:57
+msgid "Purchasing Information:"
+msgstr ""
+
+#: template/customer_bank_transfer.itpl.php:62
+msgid "E-mail Address:"
+msgstr ""
+
+#: template/customer_bank_transfer.itpl.php:74
+msgid "Billing Address:"
+msgstr ""
+
+#: template/customer_bank_transfer.itpl.php:77
+msgid "Billing Phone:"
+msgstr ""
+
+#: template/customer_bank_transfer.itpl.php:82
+msgid "Shipping Address:"
+msgstr ""
+
+#: template/customer_bank_transfer.itpl.php:85
+msgid "Shipping Phone:"
+msgstr ""
+
+#: template/customer_bank_transfer.itpl.php:96
+msgid "Order Grand Total:"
+msgstr ""
+
+#: template/customer_bank_transfer.itpl.php:104
+msgid "Payment Method:"
+msgstr ""
+
+#: template/customer_bank_transfer.itpl.php:113
+msgid "To:"
+msgstr ""
+
+#: template/customer_bank_transfer.itpl.php:123
+msgid "Order Summary:"
+msgstr ""
+
+#: template/customer_bank_transfer.itpl.php:130
+msgid "Shipping Details:"
+msgstr ""
+
+#: template/customer_bank_transfer.itpl.php:141
+msgid "Order #:"
+msgstr ""
+
+#: template/customer_bank_transfer.itpl.php:151
+msgid "Shipping Method:"
+msgstr ""
+
+#: template/customer_bank_transfer.itpl.php:161
+msgid "Products Subtotal:"
+msgstr ""
+
+#: template/customer_bank_transfer.itpl.php:202
+msgid "Total for this Order:"
+msgstr ""
+
+#: template/customer_bank_transfer.itpl.php:211
+msgid "Products on order:"
+msgstr ""
+
+#: template/customer_bank_transfer.itpl.php:239
+msgid "(!price each)"
+msgstr ""
+
+#: template/customer_bank_transfer.itpl.php:242
+msgid "SKU: "
+msgstr ""
+
+#: template/customer_bank_transfer.itpl.php:245
+msgid "@attribute: @options"
+msgstr ""
+
+#: template/customer_bank_transfer.itpl.php:268
+msgid "Where can I get help with reviewing my order?"
+msgstr ""
+
+#: template/customer_bank_transfer.itpl.php:269
+msgid "To learn more about managing your orders on [store-link], please visit our <a href=\"[store-help-url]\">help page</a>."
+msgstr ""
+
+#: template/customer_bank_transfer.itpl.php:274
+msgid "Please note: This e-mail message is an automated notification. Please do not reply to this message."
+msgstr ""
+
+#: template/customer_bank_transfer.itpl.php:276
+msgid "Thanks again for shopping with us."
+msgstr ""
+
