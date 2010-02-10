@@ -32,7 +32,7 @@ function uc_bank_transfer_receive_bank_transfer_form($form_state, $order) {
   );
   $form['comment'] = array(
     '#type' => 'textfield',
-    '#title' => t('Reciept No. / Comment'),
+    '#title' => t('Receipt No. / Comment'),
     '#description' => t('Any notes about the Bank Transfer, like receipt number.'),
     '#size' => 64,
     '#maxlength' => 256,
