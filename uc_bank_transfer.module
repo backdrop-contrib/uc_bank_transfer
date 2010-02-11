@@ -155,18 +155,18 @@ function uc_payment_method_bank_transfer($op, &$arg1) {
         '#collapsible' => TRUE,
         '#collapsed' => TRUE,
       );
-      $form['uc_dd_bank']['uc_bank_transfer_account_name'] = uc_textfield(t('Account Name'), variable_get('uc_bank_transfer_account_name', ''), FALSE, t('Name associated with bank account.'), 128);
-      $form['uc_dd_bank']['uc_bank_transfer_account_number'] = uc_textfield(t('Account Number'), variable_get('uc_bank_transfer_account_number', ''), FALSE, NULL, 128);
+      $form['uc_dd_bank']['uc_bank_transfer_account_name'] = uc_textfield(t('Account name'), variable_get('uc_bank_transfer_account_name', ''), FALSE, t('Name associated with bank account.'), 128);
+      $form['uc_dd_bank']['uc_bank_transfer_account_number'] = uc_textfield(t('Account number'), variable_get('uc_bank_transfer_account_number', ''), FALSE, NULL, 128);
       $form['uc_dd_bank']['uc_bank_transfer_account_bsb'] = uc_textfield(t('BSB'), variable_get('uc_bank_transfer_account_bsb', ''), FALSE, t('Australian Bank State Branch code'), 128);
       $form['uc_dd_bank']['uc_bank_transfer_account_iban'] = uc_textfield(t('IBAN'), variable_get('uc_bank_transfer_account_iban', ''), FALSE, t('International Bank Account Number'), 128);
       $form['uc_dd_bank']['uc_bank_transfer_account_swift'] = uc_textfield(t('SWIFT'), variable_get('uc_bank_transfer_account_swift', ''), FALSE, t('SWIFT-Code (aka BIC = Bank Identifier Code)'), 128);
-      $form['uc_dd_bank']['uc_bank_transfer_account_clearing'] = uc_textfield(t('Clearing Number'), variable_get('uc_bank_transfer_account_clearing', ''), FALSE);
-      $form['uc_dd_bank']['uc_bank_transfer_account_bank'] = uc_textfield(t('Bank Name'), variable_get('uc_bank_transfer_account_bank', ''), FALSE);
-      $form['uc_dd_bank']['uc_bank_transfer_account_branch'] = uc_textfield(t('Bank Branch'), variable_get('uc_bank_transfer_account_branch', ''), FALSE);
+      $form['uc_dd_bank']['uc_bank_transfer_account_clearing'] = uc_textfield(t('Clearing number'), variable_get('uc_bank_transfer_account_clearing', ''), FALSE);
+      $form['uc_dd_bank']['uc_bank_transfer_account_bank'] = uc_textfield(t('Banking institution'), variable_get('uc_bank_transfer_account_bank', ''), FALSE);
+      $form['uc_dd_bank']['uc_bank_transfer_account_branch'] = uc_textfield(t('Branch office'), variable_get('uc_bank_transfer_account_branch', ''), FALSE);
 
       $form['uc_bank_transfer_subject_oid'] = array(
         '#type' => 'checkbox',
-        '#title' => t('Display "Subject: order number <i>[order ID]</i>"'),
+        '#title' => t('Display "Reason for payment: order number <i>[order ID]</i>"'),
         '#description' => t('Note: with this option enabled the details cannot be displayed on the checkout page (only later).'),
         '#default_value' => variable_get('uc_bank_transfer_subject_oid', FALSE),
       );
@@ -191,7 +191,7 @@ function uc_bank_transfer_bank_details($oid) {
     $bank_info[] = variable_get('uc_bank_transfer_account_name', '');
   }
   if (variable_get('uc_bank_transfer_account_number', '') <> '') {
-    $bank_info[] = t('Account') . ': ' . variable_get('uc_bank_transfer_account_number', '');
+    $bank_info[] = t('Account number') . ': ' . variable_get('uc_bank_transfer_account_number', '');
   }
   if (variable_get('uc_bank_transfer_account_bsb', '') <> '') {
     $bank_info[] = t('BSB') . ': ' . variable_get('uc_bank_transfer_account_bsb', '');
@@ -203,16 +203,16 @@ function uc_bank_transfer_bank_details($oid) {
     $bank_info[] = t('SWIFT') . ': ' . variable_get('uc_bank_transfer_account_swift', '');
   }
   if (variable_get('uc_bank_transfer_account_clearing', '') <> '') {
-    $bank_info[] = t('Clearing Number') . ': ' . variable_get('uc_bank_transfer_account_clearing', '');
+    $bank_info[] = t('Clearing number') . ': ' . variable_get('uc_bank_transfer_account_clearing', '');
   }
   if (variable_get('uc_bank_transfer_account_bank', '') <> '') {
-    $bank_info[] = t('Bank') . ': ' . variable_get('uc_bank_transfer_account_bank', '');
+    $bank_info[] = t('Banking institution') . ': ' . variable_get('uc_bank_transfer_account_bank', '');
   }
   if (variable_get('uc_bank_transfer_account_branch', '') <> '') {
-    $bank_info[] = t('Branch') . ': ' . variable_get('uc_bank_transfer_account_branch', '');
+    $bank_info[] = t('Branch office') . ': ' . variable_get('uc_bank_transfer_account_branch', '');
   }
   if (variable_get('uc_bank_transfer_subject_oid', FALSE)) {
-    $bank_info[] = '<br />' . t('Subject') . ': ' . t('order number') . ' ' . $oid;
+    $bank_info[] = '<br />' . t('Reason for payment') . ': ' . t('order number') . ' ' . $oid;
   }
   if (variable_get('uc_bank_transfer_policy', '') <> '') {
     $bank_info[] = '<br />' . variable_get('uc_bank_transfer_policy', '');
