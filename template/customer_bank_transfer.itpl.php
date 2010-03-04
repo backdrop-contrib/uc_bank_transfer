@@ -107,7 +107,7 @@
                   [order-payment-method]
                 </td>
               </tr>
-              <?php if($order->payment_method=='bank_transfer') { ?>
+              <?php if ($order->payment_method=='bank_transfer') { ?>
               <tr>
                 <td nowrap="nowrap" vAlign="top">
                   <b><?php echo t('To:'); ?></b>

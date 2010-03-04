@@ -79,11 +79,11 @@ function uc_bank_transfer_receive_bank_transfer_form_submit($form, &$form_state)
   global $user;
 
   uc_payment_enter($form_state['values']['order_id'], 'bank_transfer',
-                   $form_state['values']['amount'], $user->uid, '', $form_state['values']['comment']);
+                  $form_state['values']['amount'], $user->uid, '', $form_state['values']['comment']);
 
   db_query("INSERT INTO {uc_payment_bank_transfer} (order_id, clear_date) "
           ."VALUES (%d, %d)", $form_state['values']['order_id'],
-           mktime(12, 0, 0, $form_state['values']['clear_month'], $form_state['values']['clear_day'], $form_state['values']['clear_year']));
+          mktime(12, 0, 0, $form_state['values']['clear_month'], $form_state['values']['clear_day'], $form_state['values']['clear_year']));
 
   drupal_set_message(t('Bank Transfer received, expected clear date of @date.', array(
     '@date' => date(variable_get('uc_date_format_default', 'm/d/Y'), mktime(12, 0, 0, $form_state['values']['clear_month'], $form_state['values']['clear_day'], $form_state['values']['clear_year'])),

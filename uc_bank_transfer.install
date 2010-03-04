@@ -1,6 +1,11 @@
 <?php
 // $Id$
 
+/**
+ * @file
+ * Installing uc_bank_transfer schema
+ */
+
 function uc_bank_transfer_schema() {
   $schema = array();
 
