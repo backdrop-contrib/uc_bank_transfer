@@ -12,6 +12,7 @@ function uc_bank_transfer_init() {
   global $conf;
   $conf['i18n_variables'][] = 'uc_bank_transfer_method_title';
   $conf['i18n_variables'][] = 'uc_bank_transfer_account_name';
+  $conf['i18n_variables'][] = 'uc_bank_transfer_bank_code_appellation';
   $conf['i18n_variables'][] = 'uc_bank_transfer_account_bank';
   $conf['i18n_variables'][] = 'uc_bank_transfer_account_branch';
   $conf['i18n_variables'][] = 'uc_bank_transfer_policy';
@@ -157,10 +158,12 @@ function uc_payment_method_bank_transfer($op, &$arg1) {
       );
       $form['uc_dd_bank']['uc_bank_transfer_account_name'] = uc_textfield(t('Account name'), variable_get('uc_bank_transfer_account_name', ''), FALSE, t('Name associated with bank account.'), 128);
       $form['uc_dd_bank']['uc_bank_transfer_account_number'] = uc_textfield(t('Account number'), variable_get('uc_bank_transfer_account_number', ''), FALSE, NULL, 128);
-      $form['uc_dd_bank']['uc_bank_transfer_account_bsb'] = uc_textfield(t('BSB'), variable_get('uc_bank_transfer_account_bsb', ''), FALSE, t('Australian Bank State Branch code'), 128);
+      $form['uc_dd_bank']['uc_bank_transfer_account_bsb'] = uc_textfield(t('BSB - OBSOLETE ! '), variable_get('uc_bank_transfer_account_bsb', ''), FALSE, t('Australian Bank State Branch code - OBSOLETE - use "bank code appellation" and "bank code" instead - this field will be removed soon without update path'), 128);
       $form['uc_dd_bank']['uc_bank_transfer_account_iban'] = uc_textfield(t('IBAN'), variable_get('uc_bank_transfer_account_iban', ''), FALSE, t('International Bank Account Number'), 128);
+      $form['uc_dd_bank']['uc_bank_transfer_bank_code_appellation'] = uc_textfield(t('Bank code appellation'), variable_get('uc_bank_transfer_bank_code_appellation', 'Bank code'), FALSE, t('Appellation of bank code - depending on where your bank is located you should set this to: "BSB" (AU), "Sort code" (UK), "Bank code" (DE), "Clearing number" (CH), "Routing transit number" (US) or "Bank transit number" (CA)'), 128);
+      $form['uc_dd_bank']['uc_bank_transfer_bank_code'] = uc_textfield(t('Bank code'), variable_get('uc_bank_transfer_bank_code', ''), FALSE, t('Actual bank code, will be shown with appellation set above'), 128);
       $form['uc_dd_bank']['uc_bank_transfer_account_swift'] = uc_textfield(t('SWIFT'), variable_get('uc_bank_transfer_account_swift', ''), FALSE, t('SWIFT-Code (aka BIC = Bank Identifier Code)'), 128);
-      $form['uc_dd_bank']['uc_bank_transfer_account_clearing'] = uc_textfield(t('Clearing number'), variable_get('uc_bank_transfer_account_clearing', ''), FALSE);
+      $form['uc_dd_bank']['uc_bank_transfer_account_clearing'] = uc_textfield(t('Clearing number - OBSOLETE ! '), variable_get('uc_bank_transfer_account_clearing', ''), FALSE, t('OBSOLETE - use "bank code appellation" and "bank code" instead - this field will be removed soon without update path'), 128);
       $form['uc_dd_bank']['uc_bank_transfer_account_bank'] = uc_textfield(t('Banking institution'), variable_get('uc_bank_transfer_account_bank', ''), FALSE);
       $form['uc_dd_bank']['uc_bank_transfer_account_branch'] = uc_textfield(t('Branch office'), variable_get('uc_bank_transfer_account_branch', ''), FALSE);
 
@@ -198,6 +201,9 @@ function uc_bank_transfer_bank_details($oid) {
   }
   if (variable_get('uc_bank_transfer_account_iban', '') <> '') {
     $bank_info[] = t('IBAN') . ': ' . variable_get('uc_bank_transfer_account_iban', '');
+  }
+  if (variable_get('uc_bank_transfer_bank_code', '') <> '') {
+    $bank_info[] = variable_get('uc_bank_transfer_bank_code_appellation', 'Bank code') . ': ' . variable_get('uc_bank_transfer_bank_code', '');
   }
   if (variable_get('uc_bank_transfer_account_swift', '') <> '') {
     $bank_info[] = t('SWIFT') . ': ' . variable_get('uc_bank_transfer_account_swift', '');
