@@ -85,6 +85,13 @@ function uc_bank_transfer_token_list($type = 'all') {
 }
 
 /**
+ * Implementation of hook_uc_invoice_templates().
+ */
+function uc_bank_transfer_uc_invoice_templates() {
+  return array('customer-bank_transfer');
+}
+
+/**
  * Handle the Bank Transfer payment method.
  */
 function uc_payment_method_bank_transfer($op, &$arg1) {
