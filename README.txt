@@ -3,9 +3,11 @@
 -- INSTALLATION - INVOICE TEMPLATE --
 
 To display the bank details on the invoices you need to do the following:
-- copy the invoice template to "/ubercart/uc_order/templates"
-  (which template?: - customer_bank_transfer.itpl.php for Ubercart version <= 2.2
-                    - uc_order-customer-bank_transfer.tpl.php for Ubercart version >= 2.3)
+- Ubercart -2.2: copy the invoice template (customer_bank_transfer.itpl.php) to "/ubercart/uc_order/templates"
+  -> note: be careful not to loose your template when updating Ubercart
+- Ubercart 2.3+: copy the invoice template (uc_order-customer-bank_transfer.tpl.php) into your site theme "sites/all/themes/your-theme-name"
+  -> note 1: you also need to copy uc_order.tpl.php from "/ubercart/uc_order/templates" into your site theme
+  -> note 2: you may want to copy those files also into your admin theme to display the on-site invoices to the admin
 - select the customer_bank_transfer template for on-site invoices:
   -> Administer/Store administration/Configuration/Order settings/On-site invoice template
 - select the customer_bank_transfer template for email invoices:
