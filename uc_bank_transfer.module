@@ -39,6 +39,9 @@ function uc_bank_transfer_theme() {
       'arguments' => array('form' => NULL),
       'file' => 'uc_bank_transfer.admin.inc',
     ),
+    'uc_bank_transfer_bank_details' => array(
+      'arguments' => array('oid' => NULL),
+    ),
   );
 }
 
@@ -66,7 +69,7 @@ function uc_bank_transfer_token_values($type, $object = NULL) {
   switch ($type) {
     case 'order':
       $order = $object;
-      $values['order-payment-bank-details'] = uc_bank_transfer_bank_details($order->order_id);
+      $values['order-payment-bank-details'] = theme('uc_bank_transfer_bank_details', $arg1->order_id);
       break;
   }
 
@@ -101,12 +104,12 @@ function uc_payment_method_bank_transfer($op, &$arg1) {
         // order number is not yet generated at first display of cart details - skip to show standard message
         return ''; }
       else {
-        $details = t('To: ') . uc_bank_transfer_bank_details($arg1->order_id);
+        $details = t('To') .': '. theme('uc_bank_transfer_bank_details', $arg1->order_id);
         return $details;
       }
 
     case 'cart-review':
-      $review[] = array('title' => t('To'), 'data' => uc_bank_transfer_bank_details($arg1->order_id));
+      $review[] = array('title' => t('To'), 'data' => theme('uc_bank_transfer_bank_details', $arg1->order_id));
       return $review;
 
     case 'order-view':
@@ -157,7 +160,7 @@ function uc_payment_method_bank_transfer($op, &$arg1) {
       $form['uc_dd_bank'] = array(
         '#type' => 'fieldset',
         '#title' => t('Bank details'),
-	'#description' => t('Enter the bank account details to display to customers who choose this payment method during checkout.
+        '#description' => t('Enter the bank account details to display to customers who choose this payment method during checkout.
           Details left empty will not be shown. You can also choose to leave all bank details empty and create your own output using the payment instructions.
           '),
         '#collapsible' => TRUE,
@@ -189,6 +192,14 @@ function uc_payment_method_bank_transfer($op, &$arg1) {
       );
       return $form;
   }
+}
+
+/**
+ * Theme output displayed in checkout review, etc.
+ */
+function theme_uc_bank_transfer_bank_details($oid) {
+  $output = uc_bank_transfer_bank_details($oid);
+  return $output;
 }
 
 /**
