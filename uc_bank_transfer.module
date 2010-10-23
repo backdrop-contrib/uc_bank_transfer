@@ -236,10 +236,10 @@ function uc_bank_transfer_bank_details($oid) {
     $bank_info[] = t('Branch office') . ': ' . variable_get('uc_bank_transfer_account_branch', '');
   }
   if (variable_get('uc_bank_transfer_subject_oid', FALSE)) {
-    $bank_info[] = '<br />' . t('Reason for payment') . ': ' . t('order number') . ' ' . $oid;
+    isset($bank_info) ? ($bank_info[] = '<br />' . t('Reason for payment') . ': ' . t('order number') . ' ' . $oid) : ($bank_info[] = t('Reason for payment') . ': ' . t('order number') . ' ' . $oid);
   }
   if (variable_get('uc_bank_transfer_policy', '') <> '') {
-    $bank_info[] = '<br />' . variable_get('uc_bank_transfer_policy', '');
+    isset($bank_info) ? ($bank_info[] = '<br />' . variable_get('uc_bank_transfer_policy', '')) : ($bank_info[] = variable_get('uc_bank_transfer_policy', ''));
   }
 
   isset($bank_info) ? ($bank_details = implode('<br />', $bank_info)) : ($bank_details = '');
