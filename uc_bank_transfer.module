@@ -69,7 +69,7 @@ function uc_bank_transfer_token_values($type, $object = NULL) {
   switch ($type) {
     case 'order':
       $order = $object;
-      $values['order-payment-bank-details'] = theme('uc_bank_transfer_bank_details', $arg1->order_id);
+      $values['order-payment-bank-details'] = theme('uc_bank_transfer_bank_details', $order->order_id);
       break;
   }
 
