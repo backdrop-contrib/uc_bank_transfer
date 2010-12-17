@@ -10,18 +10,9 @@
 /**
  * Receive a Bank Transfer for an order.
  */
-function uc_bank_transfer_receive_bank_transfer_form($form_state, $order) {
+function uc_bank_transfer_receive_bank_transfer_form($form, $form_state, $order) {
   $balance = uc_payment_balance($order);
-  $context = array(
-    'revision' => 'formatted-original',
-    'type' => 'amount',
-  );
-  $options = array(
-    'sign' => FALSE,
-    'thou' => FALSE,
-    'dec' => '.',
-  );
-  $form['balance'] = array('#value' => uc_price($balance, $context));
+  $form['balance'] = array('#markup' => uc_currency_format($balance));
   $form['order_id'] = array(
     '#type' => 'hidden',
     '#value' => $order->order_id,
@@ -34,7 +25,7 @@ function uc_bank_transfer_receive_bank_transfer_form($form_state, $order) {
   $form['amount'] = array(
     '#type' => 'textfield',
     '#title' => t('Amount'),
-    '#default_value' => uc_price($balance, $context, $options),
+    '#default_value' => uc_currency_format($balance, FALSE, FALSE, '.'),
     '#size' => 10,
     '#field_prefix' => variable_get('uc_sign_after_amount', FALSE) ? '' : variable_get('uc_currency_sign', '$'),
     '#field_suffix' => variable_get('uc_sign_after_amount', FALSE) ? variable_get('uc_currency_sign', '$') : '',
@@ -51,9 +42,9 @@ function uc_bank_transfer_receive_bank_transfer_form($form_state, $order) {
     '#title' => t('Expected clear date'),
     '#collapsible' => FALSE,
   );
-  $form['clear']['clear_month'] = uc_select_month(NULL, format_date(time(), 'custom', 'n'));
-  $form['clear']['clear_day'] = uc_select_day(NULL, format_date(time(), 'custom', 'j'));
-  $form['clear']['clear_year'] = uc_select_year(NULL, format_date(time(), 'custom', 'Y'), format_date(time(), 'custom', 'Y'), format_date(time(), 'custom', 'Y') + 1);
+  $form['clear']['clear_month'] = uc_select_month(NULL, format_date(REQUEST_TIME, 'custom', 'n'));
+  $form['clear']['clear_day'] = uc_select_day(NULL, format_date(REQUEST_TIME, 'custom', 'j'));
+  $form['clear']['clear_year'] = uc_select_year(NULL, format_date(REQUEST_TIME, 'custom', 'Y'), format_date(REQUEST_TIME, 'custom', 'Y'), format_date(REQUEST_TIME, 'custom', 'Y') + 1);
   foreach (array('clear_month', 'clear_day', 'clear_year') as $key) {
     $form['clear'][$key]['#prefix'] = '<div style="float: left; margin-right: 1em;">';
     $form['clear'][$key]['#suffix'] = '</div>';
@@ -66,37 +57,50 @@ function uc_bank_transfer_receive_bank_transfer_form($form_state, $order) {
   return $form;
 }
 
-function theme_uc_bank_transfer_receive_bank_transfer_form($form) {
-  drupal_add_js(drupal_get_path('module', 'uc_payment') .'/uc_payment.js');
+/**
+ * Generate form to receive a bank transfer
+ */
+function theme_uc_bank_transfer_receive_bank_transfer_form($variables) {
+  $form = $variables['form'];
+  drupal_add_js(drupal_get_path('module', 'uc_payment') . '/uc_payment.js');
 
-  $output = '<p>'. t('Use the form to enter the Bank Transfer into the payments system and set the expected clear date.') .'</p>';
-  $output .= '<p><strong>'. t('Order balance:') .'</strong> '
-           . drupal_render($form['balance']) .'</p>';
+  $output = '<p>' . t('Use the form to enter the Bank Transfer into the payments system and set the expected clear date.') . '</p>';
+  $output .= '<p><strong>' . t('Order balance:') . '</strong> '
+           . drupal_render($form['balance']) . '</p>';
 
-  $output .= drupal_render($form);
+  $output .= drupal_render_children($form);
 
   return $output;
 }
 
+/**
+ * Validate bank transfer reception form
+ */
 function uc_bank_transfer_receive_bank_transfer_form_validate($form, &$form_state) {
   if (!$form_state['values']['bank_transfer_exists'] && !is_numeric($form_state['values']['amount'])) {
     form_set_error('amount', t('The amount must be a number.'));
   }
 }
 
+/**
+ * Submit bank transfer reception form
+ */
 function uc_bank_transfer_receive_bank_transfer_form_submit($form, &$form_state) {
   global $user;
 
   uc_payment_enter($form_state['values']['order_id'], 'bank_transfer',
                   $form_state['values']['amount'], $user->uid, '', $form_state['values']['comment']);
 
-  db_query("INSERT INTO {uc_payment_bank_transfer} (order_id, clear_date) "
-          ."VALUES (%d, %d)", $form_state['values']['order_id'],
-          mktime(12, 0, 0, $form_state['values']['clear_month'], $form_state['values']['clear_day'], $form_state['values']['clear_year']));
+  db_insert('uc_payment_bank_transfer')
+    ->fields(array(
+      'order_id' => $form_state['values']['order_id'],
+      'clear_date' => mktime(12, 0, 0, $form_state['values']['clear_month'], $form_state['values']['clear_day'], $form_state['values']['clear_year']),
+    ))
+    ->execute();
 
   drupal_set_message(t('Bank Transfer received, expected clear date of @date.', array(
     '@date' => date(variable_get('uc_date_format_default', 'm/d/Y'), mktime(12, 0, 0, $form_state['values']['clear_month'], $form_state['values']['clear_day'], $form_state['values']['clear_year'])),
   )));
 
-  drupal_goto('admin/store/orders/'. $form_state['values']['order_id']);
+  drupal_goto('admin/store/orders/' . $form_state['values']['order_id']);
 }

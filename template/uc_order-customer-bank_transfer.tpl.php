@@ -42,13 +42,13 @@
 
             <?php if (isset($_SESSION['new_user'])) { ?>
             <p><b><?php echo t('An account has been created for you with the following details:'); ?></b></p>
-            <p><b><?php echo t('Username:'); ?></b> <?php echo $new_username; ?><br />
-            <b><?php echo t('Password:'); ?></b> <?php echo $new_password; ?></p>
+            <p><b><?php echo t('Username:'); ?></b> <?php echo $order_new_username; ?><br />
+            <b><?php echo t('Password:'); ?></b> <?php echo $order_new_password; ?></p>
             <?php } ?>
 
             <p><b><?php echo t('Want to manage your order online?'); ?></b><br />
             <?php echo t('If you need to check the status of your order, please visit our home page at !store_link and click on "My account" in the menu or login with the following link:', array('!store_link' => $store_link)); ?>
-            <br /><br /><?php echo $site_login; ?></p>
+            <br /><br /><?php echo $site_login_link; ?></p>
             <?php } ?>
 
             <table cellpadding="4" cellspacing="0" border="0" width="100%" style="font-family: verdana, arial, helvetica; font-size: small;">
@@ -150,7 +150,7 @@
                         <b><?php echo t('Order Date: '); ?></b>
                       </td>
                       <td width="98%">
-                        <?php echo $order_date_created; ?>
+                        <?php echo $order_created; ?>
                       </td>
                     </tr>
 
@@ -175,27 +175,17 @@
                     </tr>
 
                     <?php
-                    $context = array(
-                      'revision' => 'themed',
-                      'type' => 'line_item',
-                      'subject' => array(
-                        'order' => $order,
-                      ),
-                    );
                     foreach ($line_items as $item) {
-                    if ($item['line_item_id'] == 'subtotal' || $item['line_item_id'] == 'total') {
-                      continue;
-                    }?>
+                      if ($item['line_item_id'] == 'subtotal' || $item['line_item_id'] == 'total') {
+                        continue;
+                      } ?>
 
                     <tr>
                       <td nowrap="nowrap">
                         <?php echo $item['title']; ?>:
                       </td>
                       <td>
-                        <?php
-                          $context['subject']['line_item'] = $item;
-                          echo uc_price($item['amount'], $context);
-                        ?>
+                        <?php echo uc_currency_format($item['amount']); ?>
                       </td>
                     </tr>
 
@@ -221,38 +211,26 @@
 
                         <table width="100%" style="font-family: verdana, arial, helvetica; font-size: small;">
 
-                          <?php if (is_array($order->products)) {
-                            $context = array(
-                              'revision' => 'formatted',
-                              'type' => 'order_product',
-                              'subject' => array(
-                                'order' => $order,
-                              ),
-                            );
+                          <?php
+                          if (is_array($order->products)) {
                             foreach ($order->products as $product) {
-                              $price_info = array(
-                                'price' => $product->price,
-                                'qty' => $product->qty,
-                              );
-                              $context['subject']['order_product'] = $product;
-                              $context['subject']['node'] = node_load($product->nid);
-                              ?>
+                          ?>
                           <tr>
                             <td valign="top" nowrap="nowrap">
                               <b><?php echo $product->qty; ?> x </b>
                             </td>
                             <td width="98%">
-                              <b><?php echo $product->title .' - '. uc_price($price_info, $context); ?></b>
+                              <b><?php echo $product->title . ' - ' . uc_currency_format($product->price * $product->qty); ?></b>
                               <?php if ($product->qty > 1) {
-                                $price_info['qty'] = 1;
-                                echo t('(!price each)', array('!price' => uc_price($price_info, $context)));
+                                echo t('(!price each)', array('!price' => uc_currency_format($product->price)));
                               } ?>
                               <br />
                               <?php echo t('SKU: ') . $product->model; ?><br />
-                              <?php if (is_array($product->data['attributes']) && count($product->data['attributes']) > 0) {?>
-                              <?php foreach ($product->data['attributes'] as $attribute => $option) {
-                                echo '<li>'. t('@attribute: @options', array('@attribute' => $attribute, '@options' => implode(', ', (array)$option))) .'</li>';
-                              } ?>
+                              <?php if (is_array($product->data['attributes']) && count($product->data['attributes']) > 0) { ?>
+                              <?php
+                                foreach ($product->data['attributes'] as $attribute => $option) {
+                                  echo '<li>' . t('@attribute: @options', array('@attribute' => $attribute, '@options' => implode(', ', (array)$option))) . '</li>';
+                                } ?>
                               <?php } ?>
                               <br />
                             </td>

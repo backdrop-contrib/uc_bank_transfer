@@ -6,10 +6,14 @@
  * Installing uc_bank_transfer schema
  */
 
+/**
+ * bank transfer install schema
+ */
 function uc_bank_transfer_schema() {
   $schema = array();
 
   $schema['uc_payment_bank_transfer'] = array(
+    'description' => 'Stores bank transfer payment information.',
     'fields' => array(
       'bank_transfer_id' => array(
         'type' => 'serial',
@@ -37,12 +41,11 @@ function uc_bank_transfer_schema() {
   return $schema;
 }
 
-function uc_bank_transfer_install() {
-  drupal_install_schema('uc_bank_transfer');
-}
-
+/**
+ * bank transfer cleanup database on uninstall
+ */
 function uc_bank_transfer_uninstall() {
-  drupal_uninstall_schema('uc_bank_transfer');
-
-  db_query("DELETE FROM {variable} WHERE name LIKE 'uc_bank_transfer_%%'");
+  db_delete('variable')
+    ->condition('name', 'uc_bank_transfer_%', 'LIKE')
+    ->execute();
 }
