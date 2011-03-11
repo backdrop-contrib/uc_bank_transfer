@@ -16,11 +16,6 @@ function uc_bank_transfer_receive_bank_transfer_form($form, $form_state, $order)
     '#type' => 'hidden',
     '#value' => $order->order_id,
   );
-  $form['bank_transfer_exists'] = array(
-    '#type' => 'bank_transferbox',
-    '#title' => t('Bank Transfer has already been received.'),
-    '#attributes' => array('onclick' => 'receive_bank_transfer_toggle(this.bank_transfered);'),
-  );
   $form['amount'] = array(
     '#type' => 'textfield',
     '#title' => t('Amount'),
@@ -76,7 +71,7 @@ function theme_uc_bank_transfer_receive_bank_transfer_form($variables) {
  * Validate bank transfer reception form
  */
 function uc_bank_transfer_receive_bank_transfer_form_validate($form, &$form_state) {
-  if (!$form_state['values']['bank_transfer_exists'] && !is_numeric($form_state['values']['amount'])) {
+  if (!is_numeric($form_state['values']['amount'])) {
     form_set_error('amount', t('The amount must be a number.'));
   }
 }
