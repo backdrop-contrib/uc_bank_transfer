@@ -102,14 +102,10 @@ function uc_bank_transfer_uc_invoice_templates() {
 function uc_payment_method_bank_transfer($op, &$order) {
   switch ($op) {
     case 'cart-details':
-      if (variable_get('uc_bank_transfer_subject_oid', TRUE)) {
-        // order number is not yet generated at first display of cart details - skip to show standard message
-        return '';
-      }
-      else {
-        $details = t('To') . ': ' . theme('uc_bank_transfer_bank_details', array('oid' => $order->order_id));
-        return $details;
-      }
+      $build['instructions'] = array(
+        '#markup' => t('Make payment to') . ':<br />' . theme('uc_bank_transfer_bank_details', array('oid' => $order->order_id)),
+      );
+      return $build;
 
     case 'cart-review':
       $review[] = array(
@@ -177,7 +173,6 @@ function uc_payment_method_bank_transfer($op, &$order) {
       $form['uc_bank_transfer_subject_oid'] = array(
         '#type' => 'checkbox',
         '#title' => t('Display "Reason for payment: order number <i>[order ID]</i>"'),
-        '#description' => t('Note: with this option enabled the details cannot be displayed on the checkout page (only later).'),
         '#default_value' => variable_get('uc_bank_transfer_subject_oid', FALSE),
       );
       $form['uc_bank_transfer_policy'] = array(
