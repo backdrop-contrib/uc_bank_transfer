@@ -97,6 +97,38 @@ function uc_bank_transfer_uc_invoice_templates() {
 }
 
 /**
+* Implements hook_variable_info().
+*/
+function uc_bank_transfer_variable_info($options) {
+  $variable['uc_bank_transfer_method_title'] = array(
+    'title' => t('Bank transfer - method title'),
+    'description' => t('Name for bank transfer payment method presented to the customer.'),
+  );
+  $variable['uc_bank_transfer_account_owner'] = array(
+    'title' => t('Bank transfer - account owner'),
+    'description' => t('Owner of bank account.'),
+  );
+  $variable['uc_bank_transfer_bank_code_appellation'] = array(
+    'title' => t('Bank transfer - bank code appellation'),
+    'description' => t('Appellation of bank code.'),
+  );
+  $variable['uc_bank_transfer_account_bank'] = array(
+    'title' => t('Bank transfer - account bank'),
+    'description' => t('Bank holding account.'),
+  );
+  $variable['uc_bank_transfer_account_branch'] = array(
+    'title' => t('Bank transfer - account branch'),
+    'description' => t('Branch office of holding bank.'),
+  );
+  $variable['uc_bank_transfer_policy'] = array(
+    'title' => t('Bank transfer - policy'),
+    'description' => t('Transfer instructions.'),
+  );
+
+  return $variable;  
+}
+
+/**
  * Handle the Bank Transfer payment method.
  */
 function uc_payment_method_bank_transfer($op, &$order) {
