@@ -1,4 +1,5 @@
 <?php
+// $Id: uc_order-customer-bank_transfer.tpl.php,v 1.2 2010/12/17 07:09:33 xibun Exp $
 
 /**
  * @file
@@ -16,16 +17,16 @@
             <table width="100%" style="font-family: verdana, arial, helvetica; font-size: small;">
               <tr>
                 <td>
-                  [site-logo]
+                  <?php echo $site_logo; ?>
                 </td>
                 <td width="98%">
                   <div style="padding-left: 1em;">
-                  <span style="font-size: large;">[store-name]</span><br />
-                  [site-slogan]
+                  <span style="font-size: large;"><?php echo $store_name; ?></span><br />
+                  <?php echo $site_slogan; ?>
                   </div>
                 </td>
                 <td nowrap="nowrap">
-                  [store-address]<br />[store-phone]
+                  <?php echo $store_address; ?><br /><?php echo $store_phone; ?>
                 </td>
               </tr>
             </table>
@@ -37,17 +38,17 @@
           <td>
 
             <?php if ($thank_you_message) { ?>
-            <p><b><?php echo t('Thanks for your order, [order-first-name]!'); ?></b></p>
+            <p><b><?php echo t('Thanks for your order, !order_first_name!', array('!order_first_name' => $order_first_name)); ?></b></p>
 
             <?php if (isset($_SESSION['new_user'])) { ?>
             <p><b><?php echo t('An account has been created for you with the following details:'); ?></b></p>
-            <p><b><?php echo t('Username:'); ?></b> [new-username]<br />
-            <b><?php echo t('Password:'); ?></b> [new-password]</p>
+            <p><b><?php echo t('Username:'); ?></b> <?php echo $order_new_username; ?><br />
+            <b><?php echo t('Password:'); ?></b> <?php echo $order_new_password; ?></p>
             <?php } ?>
 
             <p><b><?php echo t('Want to manage your order online?'); ?></b><br />
-            <?php echo t('If you need to check the status of your order, please visit our home page at [store-link] and click on "My account" in the menu or login with the following link:'); ?>
-            <br /><br />[site-login]</p>
+            <?php echo t('If you need to check the status of your order, please visit our home page at !store_link and click on "My account" in the menu or login with the following link:', array('!store_link' => $store_link)); ?>
+            <br /><br /><?php echo $site_login_link; ?></p>
             <?php } ?>
 
             <table cellpadding="4" cellspacing="0" border="0" width="100%" style="font-family: verdana, arial, helvetica; font-size: small;">
@@ -61,7 +62,7 @@
                   <b><?php echo t('E-mail Address:'); ?></b>
                 </td>
                 <td width="98%">
-                  [order-email]
+                  <?php echo $order_email; ?>
                 </td>
               </tr>
               <tr>
@@ -71,18 +72,18 @@
                     <tr>
                       <td valign="top" width="50%">
                         <b><?php echo t('Billing Address:'); ?></b><br />
-                        [order-billing-address]<br />
+                        <?php echo $order_billing_address; ?><br />
                         <br />
                         <b><?php echo t('Billing Phone:'); ?></b><br />
-                        [order-billing-phone]<br />
+                        <?php echo $order_billing_phone; ?><br />
                       </td>
                       <?php if (uc_order_is_shippable($order)) { ?>
                       <td valign="top" width="50%">
                         <b><?php echo t('Shipping Address:'); ?></b><br />
-                        [order-shipping-address]<br />
+                        <?php echo $order_shipping_address; ?><br />
                         <br />
                         <b><?php echo t('Shipping Phone:'); ?></b><br />
-                        [order-shipping-phone]<br />
+                        <?php echo $order_shipping_phone; ?><br />
                       </td>
                       <?php } ?>
                     </tr>
@@ -95,7 +96,7 @@
                   <b><?php echo t('Order Grand Total:'); ?></b>
                 </td>
                 <td width="98%">
-                  <b>[order-total]</b>
+                  <b><?php echo $order_total; ?></b>
                 </td>
               </tr>
               <tr>
@@ -103,16 +104,16 @@
                   <b><?php echo t('Payment Method:'); ?></b>
                 </td>
                 <td width="98%">
-                  [order-payment-method]
+                  <?php echo $order_payment_method; ?>
                 </td>
               </tr>
-              <?php if ($order->payment_method=='bank_transfer') { ?>
+              <?php if($order->payment_method=='bank_transfer') { ?>
               <tr>
                 <td nowrap="nowrap" vAlign="top">
                   <b><?php echo t('To:'); ?></b>
                 </td>
                 <td width="98%">
-                  [order-payment-bank-details]
+                  <?php echo $order_payment_bank_details; ?>
                 </td>
               </tr>
               <?php } ?>
@@ -140,7 +141,16 @@
                         <b><?php echo t('Order #:'); ?></b>
                       </td>
                       <td width="98%">
-                        [order-link]
+                        <?php echo $order_link; ?>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td nowrap="nowrap">
+                        <b><?php echo t('Order Date: '); ?></b>
+                      </td>
+                      <td width="98%">
+                        <?php echo $order_created; ?>
                       </td>
                     </tr>
 
@@ -150,7 +160,7 @@
                         <b><?php echo t('Shipping Method:'); ?></b>
                       </td>
                       <td width="98%">
-                        [order-shipping-method]
+                        <?php echo $order_shipping_method; ?>
                       </td>
                     </tr>
                     <?php } ?>
@@ -160,32 +170,22 @@
                         <?php echo t('Products Subtotal:'); ?>&nbsp;
                       </td>
                       <td width="98%">
-                        [order-subtotal]
+                        <?php echo $order_subtotal; ?>
                       </td>
                     </tr>
 
                     <?php
-                    $context = array(
-                      'revision' => 'themed',
-                      'type' => 'line_item',
-                      'subject' => array(
-                        'order' => $order,
-                      ),
-                    );
                     foreach ($line_items as $item) {
-                    if ($item['line_item_id'] == 'subtotal' || $item['line_item_id'] == 'total') {
-                      continue;
-                    }?>
+                      if ($item['line_item_id'] == 'subtotal' || $item['line_item_id'] == 'total') {
+                        continue;
+                      } ?>
 
                     <tr>
                       <td nowrap="nowrap">
                         <?php echo $item['title']; ?>:
                       </td>
                       <td>
-                        <?php
-                          $context['subject']['line_item'] = $item;
-                          echo uc_price($item['amount'], $context);
-                        ?>
+                        <?php echo uc_currency_format($item['amount']); ?>
                       </td>
                     </tr>
 
@@ -201,7 +201,7 @@
                         <b><?php echo t('Total for this Order:'); ?>&nbsp;</b>
                       </td>
                       <td>
-                        <b>[order-total]</b>
+                        <b><?php echo $order_total; ?></b>
                       </td>
                     </tr>
 
@@ -211,38 +211,26 @@
 
                         <table width="100%" style="font-family: verdana, arial, helvetica; font-size: small;">
 
-                          <?php if (is_array($order->products)) {
-                            $context = array(
-                              'revision' => 'formatted',
-                              'type' => 'order_product',
-                              'subject' => array(
-                                'order' => $order,
-                              ),
-                            );
+                          <?php
+                          if (is_array($order->products)) {
                             foreach ($order->products as $product) {
-                              $price_info = array(
-                                'price' => $product->price,
-                                'qty' => $product->qty,
-                              );
-                              $context['subject']['order_product'] = $product;
-                              $context['subject']['node'] = node_load($product->nid);
-                              ?>
+                          ?>
                           <tr>
                             <td valign="top" nowrap="nowrap">
                               <b><?php echo $product->qty; ?> x </b>
                             </td>
                             <td width="98%">
-                              <b><?php echo $product->title .' - '. uc_price($price_info, $context); ?></b>
+                              <b><?php echo $product->title . ' - ' . uc_currency_format($product->price * $product->qty); ?></b>
                               <?php if ($product->qty > 1) {
-                                $price_info['qty'] = 1;
-                                echo t('(!price each)', array('!price' => uc_price($price_info, $context)));
+                                echo t('(!price each)', array('!price' => uc_currency_format($product->price)));
                               } ?>
                               <br />
                               <?php echo t('SKU: ') . $product->model; ?><br />
-                              <?php if (is_array($product->data['attributes']) && count($product->data['attributes']) > 0) {?>
-                              <?php foreach ($product->data['attributes'] as $attribute => $option) {
-                                echo '<li>'. t('@attribute: @options', array('@attribute' => $attribute, '@options' => implode(', ', (array)$option))) .'</li>';
-                              } ?>
+                              <?php if (is_array($product->data['attributes']) && count($product->data['attributes']) > 0) { ?>
+                              <?php
+                                foreach ($product->data['attributes'] as $attribute => $option) {
+                                  echo '<li>' . t('@attribute: @options', array('@attribute' => $attribute, '@options' => implode(', ', (array)$option))) . '</li>';
+                                } ?>
                               <?php } ?>
                               <br />
                             </td>
@@ -265,7 +253,7 @@
 
                   <?php if ($help_text) { ?>
                   <p><b><?php echo t('Where can I get help with reviewing my order?'); ?></b><br />
-                  <?php echo t('To learn more about managing your orders on [store-link], please visit our <a href="[store-help-url]">help page</a>.'); ?>
+                  <?php echo t('To learn more about managing your orders on !store_link, please visit our <a href="!store_help_url">help page</a>.', array('!store_link' => $store_link, '!store_help_url' => $store_help_url)); ?>
                   <br /></p>
                   <?php } ?>
 
@@ -276,7 +264,7 @@
                   <?php } ?>
 
                   <?php if ($store_footer) { ?>
-                  <p><b>[store-link]</b><br /><b>[site-slogan]</b></p>
+                  <p><b><?php echo $store_link; ?></b><br /><b><?php echo $site_slogan; ?></b></p>
                   <?php } ?>
                 </td>
               </tr>
