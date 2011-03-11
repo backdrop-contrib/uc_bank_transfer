@@ -10,7 +10,7 @@
 function uc_bank_transfer_init() {
   global $conf;
   $conf['i18n_variables'][] = 'uc_bank_transfer_method_title';
-  $conf['i18n_variables'][] = 'uc_bank_transfer_account_name';
+  $conf['i18n_variables'][] = 'uc_bank_transfer_account_owner';
   $conf['i18n_variables'][] = 'uc_bank_transfer_bank_code_appellation';
   $conf['i18n_variables'][] = 'uc_bank_transfer_account_bank';
   $conf['i18n_variables'][] = 'uc_bank_transfer_account_branch';
@@ -165,7 +165,7 @@ function uc_payment_method_bank_transfer($op, &$order) {
         '#collapsible' => TRUE,
         '#collapsed' => TRUE,
       );
-      $form['uc_dd_bank']['uc_bank_transfer_account_name'] = uc_textfield(t('Account name'), variable_get('uc_bank_transfer_account_name', ''), FALSE, t('Name associated with bank account.'), 128);
+      $form['uc_dd_bank']['uc_bank_transfer_account_owner'] = uc_textfield(t('Account owner'), variable_get('uc_bank_transfer_account_owner', ''), FALSE, t('Name associated with bank account.'), 128);
       $form['uc_dd_bank']['uc_bank_transfer_account_number'] = uc_textfield(t('Account number'), variable_get('uc_bank_transfer_account_number', ''), FALSE, NULL, 128);
       $form['uc_dd_bank']['uc_bank_transfer_account_iban'] = uc_textfield(t('IBAN'), variable_get('uc_bank_transfer_account_iban', ''), FALSE, t('International Bank Account Number'), 128);
       $form['uc_dd_bank']['uc_bank_transfer_bank_code_appellation'] = uc_textfield(t('Bank code appellation'), variable_get('uc_bank_transfer_bank_code_appellation', 'Bank code'), FALSE, t('Appellation of bank code - depending on where your bank is located you should set this to: "BSB" (AU), "Sort code" (UK), "Bank code" (DE), "Clearing number" (CH), "Routing transit number" (US) or "Bank transit number" (CA)'), 128);
@@ -206,8 +206,8 @@ function theme_uc_bank_transfer_bank_details($variables) {
  * $oid = order ID
  */
 function uc_bank_transfer_bank_details($oid) {
-  if (variable_get('uc_bank_transfer_account_name', '') <> '') {
-    $bank_info[] = variable_get('uc_bank_transfer_account_name', '');
+  if (variable_get('uc_bank_transfer_account_owner', '') <> '') {
+    $bank_info[] = t('Account owner') . ': ' . variable_get('uc_bank_transfer_account_owner', '');
   }
   if (variable_get('uc_bank_transfer_account_number', '') <> '') {
     $bank_info[] = t('Account number') . ': ' . variable_get('uc_bank_transfer_account_number', '');
