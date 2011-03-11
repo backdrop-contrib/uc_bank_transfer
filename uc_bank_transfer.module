@@ -130,7 +130,7 @@ function uc_payment_method_bank_transfer($op, &$order) {
         $output = l(t('Receive Bank Transfer'), 'admin/store/orders/' . $order->order_id . '/receive_bank_transfer');
       }
       $output .= '<br />';
-      return $output;
+      return array('#markup' => $output);
 
     case 'customer-view':
       if (!variable_get('uc_payment_tracking', TRUE)) {
