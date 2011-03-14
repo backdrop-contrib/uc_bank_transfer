@@ -65,28 +65,34 @@ function uc_bank_transfer_uc_payment_method() {
 }
 
 /**
- * Implements hook_token_values().
+ * Implements hook_token_info().
  */
-function uc_bank_transfer_token_values($type, $object = NULL) {
-  switch ($type) {
-    case 'order':
-      $order = $object;
-      $values['order-payment-bank-details'] = theme('uc_bank_transfer_bank_details', array('oid' => $order->order_id));
-      break;
-  }
-
-  return $values;
+function uc_bank_transfer_token_info_alter(&$data) {
+  $data['tokens']['uc_order']['payment-bank-details'] = array(
+    'name' => t('Payment bank details'),
+    'description' => t('The bank details of the order.'),
+  );
 }
 
 /**
- * Implements hook_token_list(). (token.module)().
+ * Implements hook_tokens().
  */
-function uc_bank_transfer_token_list($type = 'all') {
-  if ($type == 'order' || $type == 'ubercart' || $type == 'all') {
-    $tokens['order']['order-payment-bank-details'] = t('The bank details of the order.');
+function uc_bank_transfer_tokens($type, $tokens, array $data = array(), array $options = array()) {
+  $replacements = array();
+
+  if ($type == 'uc_order' && !empty($data['uc_order'])) {
+    $order = $data['uc_order'];
+
+    foreach ($tokens as $name => $original) {
+      switch ($name) {
+        case 'payment-bank-details':
+          $replacements[$original] = theme('uc_bank_transfer_bank_details', array('oid' => $order->order_id));
+          break;
+      }
+    }
   }
 
-  return $tokens;
+  return $replacements;
 }
 
 /**
