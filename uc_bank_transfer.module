@@ -171,11 +171,12 @@ function uc_payment_method_bank_transfer($op, &$order) {
         return '';
       }
       $result = db_query("SELECT clear_date FROM {uc_payment_bank_transfer} WHERE order_id = :id ", array(':id' => $order->order_id));
+      $output = t('Status: pending');
       if ($clear_date = $result->fetchField()) {
         $output = t('Bank Transfer received') . '<br />'
                 . t('Expected clear date:') . '<br />' . format_date($clear_date, 'custom', variable_get('uc_date_format_default', 'd/m/Y'));
       }
-      return $output;
+      return array('#markup' => $output);
 
     case 'settings':
       // help text
