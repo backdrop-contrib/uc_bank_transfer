@@ -56,7 +56,6 @@ function uc_bank_transfer_receive_bank_transfer_form($form, $form_state, $order)
  */
 function theme_uc_bank_transfer_receive_bank_transfer_form($variables) {
   $form = $variables['form'];
-  drupal_add_js(drupal_get_path('module', 'uc_payment') . '/uc_payment.js');
 
   $output = '<p>' . t('Use the form to enter the Bank Transfer into the payments system and set the expected clear date.') . '</p>';
   $output .= '<p><strong>' . t('Order balance:') . '</strong> '

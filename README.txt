@@ -1,5 +1,3 @@
-/* $Id: README.txt,v 1.4 2010/07/29 05:46:47 xibun Exp $ */
-
 -- INSTALLATION - INVOICE TEMPLATE --
 
 To display the bank details on the invoices you need to do the following:
