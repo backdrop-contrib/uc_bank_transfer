@@ -1,3 +1,6 @@
+Ubercart Bank Transfer
+===========
+
 This module provides an Ubercart payment method. It helps to display the shop's bank account details to the customer so a direct money transfer can be initiated by the customer. Depending on where you are from you might call this method bank transfer, wire transfer, giro transfer or direct deposit.
 
 Features
