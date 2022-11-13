@@ -21,8 +21,8 @@ function uc_bank_transfer_receive_bank_transfer_form($form, $form_state, $order)
     '#title' => t('Amount'),
     '#default_value' => uc_currency_format($balance, FALSE, FALSE, '.'),
     '#size' => 10,
-    '#field_prefix' => variable_get('uc_sign_after_amount', FALSE) ? '' : variable_get('uc_currency_sign', '$'),
-    '#field_suffix' => variable_get('uc_sign_after_amount', FALSE) ? variable_get('uc_currency_sign', '$') : '',
+    '#field_prefix' => config_get('uc_store.settings', 'uc_sign_after_amount') ? '' : config_get('uc_store.settings', 'uc_currency_sign'),
+    '#field_suffix' => config_get('uc_store.settings', 'uc_sign_after_amount') ? config_get('uc_store.settings', 'uc_currency_sign') : '',
   );
   $form['comment'] = array(
     '#type' => 'textfield',
@@ -59,9 +59,9 @@ function theme_uc_bank_transfer_receive_bank_transfer_form($variables) {
 
   $output = '<p>' . t('Use the form to enter the Bank Transfer into the payments system and set the expected clear date.') . '</p>';
   $output .= '<p><strong>' . t('Order balance:') . '</strong> '
-           . drupal_render($form['balance']) . '</p>';
+           . backdrop_render($form['balance']) . '</p>';
 
-  $output .= drupal_render_children($form);
+  $output .= backdrop_render_children($form);
 
   return $output;
 }
@@ -86,14 +86,14 @@ function uc_bank_transfer_receive_bank_transfer_form_submit($form, &$form_state)
 
   db_insert('uc_payment_bank_transfer')
     ->fields(array(
-      'order_id' => $form_state['values']['order_id'],
-      'clear_date' => mktime(12, 0, 0, $form_state['values']['clear_month'], $form_state['values']['clear_day'], $form_state['values']['clear_year']),
-    ))
+    'order_id' => $form_state['values']['order_id'],
+    'clear_date' => mktime(12, 0, 0, $form_state['values']['clear_month'], $form_state['values']['clear_day'], $form_state['values']['clear_year']),
+  ))
     ->execute();
 
-  drupal_set_message(t('Bank Transfer received, expected clear date of @date.', array(
-    '@date' => date(variable_get('uc_date_format_default', 'm/d/Y'), mktime(12, 0, 0, $form_state['values']['clear_month'], $form_state['values']['clear_day'], $form_state['values']['clear_year'])),
+  backdrop_set_message(t('Bank Transfer received, expected clear date of @date.', array(
+    '@date' => date(config_get('uc_store.settings', 'date_format_uc_store'), mktime(12, 0, 0, $form_state['values']['clear_month'], $form_state['values']['clear_day'], $form_state['values']['clear_year'])),
   )));
 
-  drupal_goto('admin/store/orders/' . $form_state['values']['order_id']);
+  backdrop_goto('admin/store/orders/' . $form_state['values']['order_id']);
 }
