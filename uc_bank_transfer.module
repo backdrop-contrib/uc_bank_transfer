@@ -110,7 +110,7 @@ function uc_bank_transfer_tokens($type, $tokens, array $data = array(), array $o
  * Implements hook_uc_invoice_templates().
  */
 function uc_bank_transfer_uc_invoice_templates() {
-  return array('customer-bank_transfer');
+  return array('customer_bank_transfer');
 }
 
 /**
